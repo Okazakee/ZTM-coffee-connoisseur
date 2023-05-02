@@ -6,7 +6,10 @@ import coffeeStores from "../data/coffee-stores.json"
 import Banner from "../components/banner";
 import Card from "../components/card";
 
-export default function Home() {
+export default function Home(props) {
+
+  console.log(props)
+
   const handleOnBannerClick = () => {
     console.log("ats");
   }
@@ -30,6 +33,7 @@ export default function Home() {
             return(
               <Card
                 className={styles.card}
+                key={store.id}
                 name={store.name}
                 href={`/coffee-store/${store.id}`}
                 imgUrl={store.imgUrl}
@@ -40,4 +44,12 @@ export default function Home() {
       </main>
     </div>
   );
+}
+
+export async function getStaticProps(context) {
+  return {
+    props: {
+      coffeeStores,
+    }
+  }
 }
