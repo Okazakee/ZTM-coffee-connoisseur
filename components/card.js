@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import cls from 'classnames'
+import cls from 'classnames';
 
-import styles from "./card.module.css"
+import styles from "./card.module.css";
 
 function Card(props) {
   return (
