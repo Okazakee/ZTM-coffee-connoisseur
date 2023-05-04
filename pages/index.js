@@ -28,7 +28,7 @@ export default function Home({coffeeStores}) {
         </div>
         {coffeeStores.length > 0 &&
         <>
-          <h2 className={styles.heading2}>{`${coffeeStores[0].location.locality} stores`}</h2>
+          <h2 className={styles.heading2}>{`${coffeeStores[0].location.locality || "Palermo"} stores`}</h2>
           <div className={styles.cardLayout}>
             {coffeeStores.map((store) => {
               return(
