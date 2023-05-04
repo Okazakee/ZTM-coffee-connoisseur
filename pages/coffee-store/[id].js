@@ -15,7 +15,7 @@ export default function CoffeeStore(props) {
     return <div>Loading</div>
   }
 
-  const {location, name, imgUrl} = props.coffeeStore;
+  const {address, postcode, name, imgUrl} = props.coffeeStore;
 
   const handleUpvoteButton = () => {
     console.log("handle upvote");
@@ -30,7 +30,7 @@ export default function CoffeeStore(props) {
         <div className={styles.col1}>
         <div className={styles.backToHomeLink}>
           <Link href="/">
-            <a>Back to Home</a>
+            <a>← Back to Home</a>
           </Link>
         </div>
         <div className={styles.nameWrapper}>
@@ -44,15 +44,18 @@ export default function CoffeeStore(props) {
             alt={name}
           />
         </div>
+
         <div className={cls("glass", styles.col2)}>
-          <div className={styles.iconWrapper}>
+          {address && (<div className={styles.iconWrapper}>
             <Image src={"/static/icons/places.svg"} width={24} height={24} />
-            <p className={styles.text}>{location.address}</p>
+            <p className={styles.text}>{address}</p>
           </div>
-          <div className={styles.iconWrapper}>
+          )}
+          {postcode && (<div className={styles.iconWrapper}>
             <Image src={"/static/icons/nearMe.svg"} width={24} height={24} />
-            <p className={styles.text}>{location.postcode}</p>
+            <p className={styles.text}>{postcode}</p>
           </div>
+          )}
           <div className={styles.iconWrapper}>
             <Image src={"/static/icons/star.svg"} width={24} height={24} />
             <p className={styles.text}>1</p>
@@ -74,7 +77,7 @@ export async function getStaticProps(staticProps) {
   return {
     props: {
       coffeeStore: coffeeStores.find((coffeeStore) => {
-        return coffeeStore.fsq_id.toString() === params.id;
+        return coffeeStore.id.toString() === params.id;
       })
     }
   };
@@ -87,7 +90,7 @@ export async function getStaticPaths() {
   const paths = coffeeStores.map((store) => {
     return {
       params: {
-        id: store.fsq_id.toString()
+        id: store.id.toString()
       }
     }
   })

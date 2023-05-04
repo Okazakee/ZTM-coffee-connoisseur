@@ -45,14 +45,12 @@ export const fetchCoffeeStores = async() => {
 
     return data.results.map((result, i) => {
         return {
-            fsq_id: result.fsq_id,
+            id: result.fsq_id,
             name: result.name,
-            location: {
-                address: result.location.address,
-                locality: result.location.locality,
-                postcode: result.location.postcode
-            },
-            imgUrl: photos[i],
+            address: result.location.address,
+            locality: result.location.locality,
+            postcode: result.location.postcode,
+            imgUrl: photos.lenght > 0 ?photos[i] : null
         }
     });
 }
