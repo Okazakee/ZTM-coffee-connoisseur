@@ -6,9 +6,7 @@ import coffeeStoresData from "../data/coffee-stores.json"
 import Banner from "../components/banner";
 import Card from "../components/card";
 
-export default function Home(props) {
-
-  console.log(props)
+export default function Home({coffeeStores}) {
 
   const handleOnBannerClick = () => {
     console.log("ats");
@@ -28,18 +26,18 @@ export default function Home(props) {
         <div className={styles.heroImage}>
           <Image src="/static/hero-image.png" width={700} height={400}></Image>
         </div>
-        {coffeeStoresData.length > 0 &&
+        {coffeeStores.length > 0 &&
         <>
-          <h2 className={styles.heading2}>Toronto stores</h2>
+          <h2 className={styles.heading2}>{`${coffeeStores[0].location.locality} stores`}</h2>
           <div className={styles.cardLayout}>
-            {coffeeStoresData.map((store) => {
+            {coffeeStores.map((store) => {
               return(
                 <Card
                   className={styles.card}
-                  key={store.id}
+                  key={store.fsq_id}
                   name={store.name}
-                  href={`/coffee-store/${store.id}`}
-                  imgUrl={store.imgUrl}
+                  href={`/coffee-store/${store.fsq_id}`}
+                  imgUrl={store.imgUrl || "https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80"}
                 />
               )
             })}
@@ -51,9 +49,21 @@ export default function Home(props) {
 }
 
 export async function getStaticProps(context) {
+
+  const options = {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+      Authorization: process.env.FOURSQUARE_API_KEY,
+    }
+  };
+
+  const response = await fetch('https://api.foursquare.com/v3/places/search?query=coffee&ll=38.116590133305266%2C13.363525114843128&radius=5000&limit=6', options);
+  const data = await response.json();
+
   return {
     props: {
-      coffeeStores: coffeeStoresData,
+      coffeeStores: data.results,
     }
   }
 }
