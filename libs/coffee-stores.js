@@ -1,7 +1,7 @@
 import { createApi } from 'unsplash-js';
 
 const unsplash = createApi({
-  accessKey: process.env.UNSPLASH_ACCESS_KEY,
+  accessKey: process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY,
 });
 
 const getUrlForCoffeStores = (latLong, radius, limit) => {
@@ -22,7 +22,7 @@ const getListOfCoffeeStoresPhotos = async() => {
     return unsplashResults.map((result) => result.urls.small);
 }
 
-export const fetchCoffeeStores = async() => {
+export const fetchCoffeeStores = async (latLong = "38.116590133305266%2C13.363525114843128") => {
 
     const photos = await getListOfCoffeeStoresPhotos();
 
@@ -30,13 +30,13 @@ export const fetchCoffeeStores = async() => {
         method: 'GET',
         headers: {
             accept: 'application/json',
-            Authorization: process.env.FOURSQUARE_API_KEY,
+            Authorization: process.env.NEXT_PUBLIC_FOURSQUARE_API_KEY,
         }
         };
 
     const response = await fetch(getUrlForCoffeStores(
-        "38.116590133305266%2C13.363525114843128",
-        5000,
+        latLong,
+        8000,
         6
     ),
     options);
