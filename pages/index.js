@@ -55,7 +55,7 @@ export default function Home({coffeeStoresInit}) {
         </div>
         {coffeeStores &&
         <div className={styles.sectionWrapper}>
-          <h2 className={styles.heading2}>{`${coffeeStores[0].locality || "Palermo"} stores`}</h2>
+          <h2 className={styles.heading2}>{`Stores near ${coffeeStores[0].locality || "Palermo"}`}</h2>
           <div className={styles.cardLayout}>
             {coffeeStores.map((store) => {
               return(
