@@ -1,4 +1,4 @@
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
@@ -8,9 +8,12 @@ import Card from "../components/card";
 import { fetchCoffeeStores } from "../libs/coffee-stores";
 import useTrackLocation from "../hooks/user-track-location";
 
-export default function Home({coffeeStores}) {
+export default function Home({coffeeStoresInit}) {
 
   const { handleTrackLocation, latLong, locationErrorMsg, isFindingLocation } = useTrackLocation();
+
+  const [coffeeStores, SetCoffeeStores] = useState(coffeeStoresInit);
+  const [coffeeStoresError, SetCoffeeStoresError] = useState(null);
 
   useEffect(() => {
     async function setCoffeeStoresByLocation() {
@@ -18,8 +21,10 @@ export default function Home({coffeeStores}) {
             try {
               const fetchedCoffeeStores = await fetchCoffeeStores(latLong);
               console.log({fetchedCoffeeStores});
+              SetCoffeeStores(fetchedCoffeeStores);
             } catch (error) {
-              console.log({error});
+              console.log(error);
+              SetCoffeeStoresError(error);
             }
         }
     }
@@ -44,10 +49,11 @@ export default function Home({coffeeStores}) {
         <h1 className={styles.title}>Coffee Connoisseur</h1>
         <Banner buttonText={isFindingLocation ? "Locating…" : "View stores nearby"} handleOnClick={handleOnBannerClick}/>
         {locationErrorMsg && <h2>Error: {locationErrorMsg}!</h2>}
+        {coffeeStoresError && <h2>Error: {coffeeStoresError}!</h2>}
         <div className={styles.heroImage}>
           <Image src="/static/hero-image.png" width={700} height={400}></Image>
         </div>
-        {coffeeStores.length > 0 &&
+        {coffeeStores &&
         <div className={styles.sectionWrapper}>
           <h2 className={styles.heading2}>{`${coffeeStores[0].locality || "Palermo"} stores`}</h2>
           <div className={styles.cardLayout}>
@@ -71,11 +77,11 @@ export default function Home({coffeeStores}) {
 
 export async function getStaticProps(context) {
 
-  const coffeeStores = await fetchCoffeeStores();
+  const coffeeStoresInit = await fetchCoffeeStores();
 
   return {
     props: {
-      coffeeStores,
+      coffeeStoresInit,
     }
   }
 }
