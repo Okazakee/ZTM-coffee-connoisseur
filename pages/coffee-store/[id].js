@@ -1,3 +1,4 @@
+import { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Head from 'next/head';
@@ -7,7 +8,10 @@ import { fetchCoffeeStores } from '../../libs/coffee-stores';
 
 import styles from '../../styles/coffee-store.module.css'
 
-export default function CoffeeStore(props) {
+import { StoreContext } from '../_app';
+import { isEmpty } from '../../utils';
+
+export default function CoffeeStore(initialProps) {
 
   const router = useRouter();
 
@@ -15,7 +19,24 @@ export default function CoffeeStore(props) {
     return <div>Loading</div>
   }
 
-  const {address, postcode, name, imgUrl} = props.coffeeStore;
+  const id = router.query.id;
+
+  const [coffeeStore, SetCoffeeStore] = useState(initialProps.coffeeStore);
+
+  const {state: {coffeeStores} } = useContext(StoreContext);
+
+  useEffect(() => {
+    if (isEmpty(coffeeStore)) {
+      if (coffeeStores.length > 0) {
+        const findCoffeeStoreById = coffeeStores.find((store) => {
+          return store.id.toString() === id;
+        });
+        SetCoffeeStore(findCoffeeStoreById);
+      }
+    }
+  }, [id]);
+
+  const {address, postcode, name, imgUrl} = coffeeStore;
 
   const handleUpvoteButton = () => {
     console.log("handle upvote");

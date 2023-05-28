@@ -24,7 +24,6 @@ export default function Home({coffeeStoresInit}) {
   useEffect(() => {
     async function setCoffeeStoresByLocation() {
           if (latLong) {
-            console.log("aaaaaaaaaaa",latLong)
             try {
               const fetchedCoffeeStores = await fetchCoffeeStores(latLong);
               console.log({fetchedCoffeeStores});
