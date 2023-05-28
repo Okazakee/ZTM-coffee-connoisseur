@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useState, useContext} from "react";
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
@@ -8,20 +8,33 @@ import Card from "../components/card";
 import { fetchCoffeeStores } from "../libs/coffee-stores";
 import useTrackLocation from "../hooks/user-track-location";
 
+import { ACTION_TYPES, StoreContext } from "./_app";
+
 export default function Home({coffeeStoresInit}) {
 
-  const { handleTrackLocation, latLong, locationErrorMsg, isFindingLocation } = useTrackLocation();
+  const { handleTrackLocation, locationErrorMsg, isFindingLocation } = useTrackLocation();
 
-  const [coffeeStores, SetCoffeeStores] = useState(coffeeStoresInit);
+  /* const [coffeeStores, SetCoffeeStores] = useState(coffeeStoresInit); */
   const [coffeeStoresError, SetCoffeeStoresError] = useState(null);
+
+  const { dispatch, state } = useContext(StoreContext);
+
+  const { coffeeStores, latLong } = state;
 
   useEffect(() => {
     async function setCoffeeStoresByLocation() {
           if (latLong) {
+            console.log("aaaaaaaaaaa",latLong)
             try {
               const fetchedCoffeeStores = await fetchCoffeeStores(latLong);
               console.log({fetchedCoffeeStores});
-              SetCoffeeStores(fetchedCoffeeStores);
+              /* SetCoffeeStores(fetchedCoffeeStores); */
+              dispatch({
+                type: ACTION_TYPES.SET_COFFEE_STORES,
+                payload: {
+                  coffeeStores: fetchedCoffeeStores,
+                }
+              })
             } catch (error) {
               console.log(error);
               SetCoffeeStoresError(error);
@@ -55,9 +68,9 @@ export default function Home({coffeeStoresInit}) {
         </div>
         {coffeeStores &&
         <div className={styles.sectionWrapper}>
-          <h2 className={styles.heading2}>{`Stores near ${coffeeStores[0].locality || "Palermo"}`}</h2>
+          <h2 className={styles.heading2}>{`Stores near ${coffeeStores[0]?.locality || "Palermo"}`}</h2>
           <div className={styles.cardLayout}>
-            {coffeeStores.map((store) => {
+            {(coffeeStores.length === 0 ? coffeeStoresInit : coffeeStores).map((store) => {
               return(
                 <Card
                   className={styles.card}
