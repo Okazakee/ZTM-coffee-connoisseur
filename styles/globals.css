@@ -29,7 +29,7 @@ body {
   background: url("/static/bg.png");
   background-position: 50%;
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: fill;
   color: #373b64;
 }
 

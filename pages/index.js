@@ -8,7 +8,7 @@ import Card from "../components/card";
 import { fetchCoffeeStores } from "../libs/coffee-stores";
 import useTrackLocation from "../hooks/user-track-location";
 
-import { ACTION_TYPES, StoreContext } from "./_app";
+import { ACTION_TYPES, StoreContext } from '../contexts/store-context'
 
 export default function Home({coffeeStoresInit}) {
 

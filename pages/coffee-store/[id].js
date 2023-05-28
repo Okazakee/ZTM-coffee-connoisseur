@@ -8,7 +8,7 @@ import { fetchCoffeeStores } from '../../libs/coffee-stores';
 
 import styles from '../../styles/coffee-store.module.css'
 
-import { StoreContext } from '../_app';
+import { StoreContext } from '../../contexts/store-context';
 import { isEmpty } from '../../utils';
 
 export default function CoffeeStore(initialProps) {
