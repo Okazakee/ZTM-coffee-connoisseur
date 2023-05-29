@@ -50,7 +50,7 @@ export const fetchCoffeeStores = async (latLong = "38.116590133305266%2C13.36352
             address: result.location.address,
             locality: result.location.locality,
             postcode: result.location.postcode,
-            imgUrl: photos.lenght > 0 ?photos[i] : null
+            imgUrl: photos.lenght !== 0 ? photos[i] : null
         }
     });
 }

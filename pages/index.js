@@ -23,26 +23,31 @@ export default function Home({coffeeStoresInit}) {
 
   useEffect(() => {
     async function setCoffeeStoresByLocation() {
-          if (latLong) {
-            try {
-              const fetchedCoffeeStores = await fetchCoffeeStores(latLong);
-              console.log({fetchedCoffeeStores});
-              /* SetCoffeeStores(fetchedCoffeeStores); */
-              dispatch({
-                type: ACTION_TYPES.SET_COFFEE_STORES,
-                payload: {
-                  coffeeStores: fetchedCoffeeStores,
-                }
-              })
-            } catch (error) {
-              console.log(error);
-              SetCoffeeStoresError(error);
+      if (latLong) {
+        try {
+          const response = await fetch(`/api/getCoffeeStoresByLocation?latLong=${latLong}`);
+
+          const coffeeStores = await response.json();
+
+          console.log(coffeeStores);
+
+          dispatch({
+            type: ACTION_TYPES.SET_COFFEE_STORES,
+            payload: {
+              coffeeStores,
             }
+          });
+
+          SetCoffeeStoresError("");
+        } catch (error) {
+          console.log(error);
+          SetCoffeeStoresError(error.message); // Store the error message in the state
         }
+      }
     }
 
     setCoffeeStoresByLocation();
-    },[latLong])
+  }, [latLong]);
 
   const handleOnBannerClick = () => {
     handleTrackLocation();
