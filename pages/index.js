@@ -47,7 +47,7 @@ export default function Home({coffeeStoresInit}) {
     }
 
     setCoffeeStoresByLocation();
-  }, [latLong]);
+  }, [latLong, dispatch]);
 
   const handleOnBannerClick = () => {
     handleTrackLocation();
@@ -68,7 +68,7 @@ export default function Home({coffeeStoresInit}) {
         {locationErrorMsg && <h2>Error: {locationErrorMsg}!</h2>}
         {coffeeStoresError && <h2>Error: {coffeeStoresError}!</h2>}
         <div className={styles.heroImage}>
-          <Image src="/static/hero-image.png" width={700} height={400}></Image>
+          <Image src="/static/hero-image.png" width={700} height={400} alt="heroImg"></Image>
         </div>
         {coffeeStores &&
         <div className={styles.sectionWrapper}>

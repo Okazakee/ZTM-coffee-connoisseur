@@ -6,41 +6,37 @@ import Image from 'next/image';
 import cls from 'classnames';
 import { fetchCoffeeStores } from '../../libs/coffee-stores';
 
-import styles from '../../styles/coffee-store.module.css'
+import styles from '../../styles/coffee-store.module.css';
 
 import { StoreContext } from '../../contexts/store-context';
 import { isEmpty } from '../../utils';
 
-export default function CoffeeStore(initialProps) {
-
+export default function CoffeeStore({ initialProps }) {
   const router = useRouter();
-
-  if (router.isFallback) {
-    return <div>Loading</div>
-  }
-
   const id = router.query.id;
 
-  const [coffeeStore, SetCoffeeStore] = useState(initialProps.coffeeStore);
+  const { state: { coffeeStores } } = useContext(StoreContext);
 
-  const {state: {coffeeStores} } = useContext(StoreContext);
+  const [coffeeStore, setCoffeeStore] = useState(initialProps.coffeeStore);
 
   useEffect(() => {
     if (isEmpty(coffeeStore)) {
       if (coffeeStores.length > 0) {
-        const findCoffeeStoreById = coffeeStores.find((store) => {
-          return store.id.toString() === id;
-        });
-        SetCoffeeStore(findCoffeeStoreById);
+        const findCoffeeStoreById = coffeeStores.find((store) => store.id.toString() === id);
+        setCoffeeStore(findCoffeeStoreById);
       }
     }
-  }, [id]);
+  }, [id, coffeeStore, coffeeStores]);
 
-  const {address, postcode, name, imgUrl} = coffeeStore;
+  if (router.isFallback) {
+    return <div>Loading</div>;
+  }
+
+  const { address, postcode, name, imgUrl } = coffeeStore;
 
   const handleUpvoteButton = () => {
-    console.log("handle upvote");
-  }
+    console.log('handle upvote');
+  };
 
   return (
     <div className={styles.layout}>
@@ -49,16 +45,16 @@ export default function CoffeeStore(initialProps) {
       </Head>
       <div className={styles.container}>
         <div className={styles.col1}>
-        <div className={styles.backToHomeLink}>
-          <Link href="/">
-            <a>← Back to Home</a>
-          </Link>
-        </div>
-        <div className={styles.nameWrapper}>
-          <h1>{name}</h1>
-        </div>
+          <div className={styles.backToHomeLink}>
+            <Link href="/">
+              <a>← Back to Home</a>
+            </Link>
+          </div>
+          <div className={styles.nameWrapper}>
+            <h1>{name}</h1>
+          </div>
           <Image
-            src={imgUrl || "https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80"}
+            src={imgUrl || 'https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80'}
             width={600}
             height={360}
             className={styles.storeImg}
@@ -66,19 +62,21 @@ export default function CoffeeStore(initialProps) {
           />
         </div>
 
-        <div className={cls("glass", styles.col2)}>
-          {address && (<div className={styles.iconWrapper}>
-            <Image src={"/static/icons/places.svg"} width={24} height={24} />
-            <p className={styles.text}>{address}</p>
-          </div>
+        <div className={cls('glass', styles.col2)}>
+          {address && (
+            <div className={styles.iconWrapper}>
+              <Image src={'/static/icons/places.svg'} width={24} height={24} alt={name} />
+              <p className={styles.text}>{address}</p>
+            </div>
           )}
-          {postcode && (<div className={styles.iconWrapper}>
-            <Image src={"/static/icons/nearMe.svg"} width={24} height={24} />
-            <p className={styles.text}>{postcode}</p>
-          </div>
+          {postcode && (
+            <div className={styles.iconWrapper}>
+              <Image src={'/static/icons/nearMe.svg'} width={24} height={24} alt={name} />
+              <p className={styles.text}>{postcode}</p>
+            </div>
           )}
           <div className={styles.iconWrapper}>
-            <Image src={"/static/icons/star.svg"} width={24} height={24} />
+            <Image src={'/static/icons/star.svg'} width={24} height={24} alt={name} />
             <p className={styles.text}>1</p>
           </div>
           <button className={styles.upvoteButton} onClick={handleUpvoteButton}>
@@ -87,7 +85,7 @@ export default function CoffeeStore(initialProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export async function getStaticProps(staticProps) {
@@ -95,31 +93,26 @@ export async function getStaticProps(staticProps) {
 
   const coffeeStores = await fetchCoffeeStores();
 
-  const findCoffeeStoreById = coffeeStores.find((store) => {
-    return store.id.toString() === params.id
-  })
+  const findCoffeeStoreById = coffeeStores.find((store) => store.id.toString() === params.id);
 
   return {
     props: {
-      coffeeStore: findCoffeeStoreById ? findCoffeeStoreById : {}
-    }
+      coffeeStore: findCoffeeStoreById ? findCoffeeStoreById : {},
+    },
   };
 }
 
 export async function getStaticPaths() {
-
   const coffeeStores = await fetchCoffeeStores();
 
-  const paths = coffeeStores.map((store) => {
-    return {
-      params: {
-        id: store.id.toString()
-      }
-    }
-  })
+  const paths = coffeeStores.map((store) => ({
+    params: {
+      id: store.id.toString(),
+    },
+  }));
 
   return {
     paths,
     fallback: true,
-  }
+  };
 }
