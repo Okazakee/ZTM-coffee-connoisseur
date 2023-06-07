@@ -6,13 +6,13 @@ const base = new Airtable({ apiKey: process.env.AIRTABLE_API_TOKEN }).base(
 const table = base("coffee-stores");
 
 const getMinifiedRecord = (record) => {
-    return {
-        ...record.fields
-    };
+  return {
+    ...record.fields,
+  };
 };
 
 const getMinifiedRecords = (records) => {
-    return records.map((record) => getMinifiedRecord(record));
+  return records.map((record) => getMinifiedRecord(record));
 };
 
-export {table, getMinifiedRecords};
+export { table, getMinifiedRecords };

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import cls from 'classnames';
+import cls from "classnames";
 
 import styles from "./card.module.css";
 
@@ -13,12 +13,18 @@ function Card(props) {
             <h2 className={styles.cardHeader}>{props.name}</h2>
           </div>
           <div className={styles.cardImageWrapper}>
-            <Image className={styles.cardImage} src={props.imgUrl} width={260} height={160} alt="cardImg" />
+            <Image
+              className={styles.cardImage}
+              src={props.imgUrl}
+              width={260}
+              height={160}
+              alt="cardImg"
+            />
           </div>
         </div>
       </a>
     </Link>
-  )
+  );
 }
 
-export default Card
+export default Card;

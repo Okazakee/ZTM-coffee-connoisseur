@@ -23,7 +23,7 @@
 
 .cardLayout {
   display: grid;
-  grid-template-columns: repeat(1, minmax(0,1fr));
+  grid-template-columns: repeat(1, minmax(0, 1fr));
   column-gap: 1.5rem;
   row-gap: 1.5rem;
 }
@@ -65,7 +65,7 @@
   }
 
   .cardLayout {
-    grid-template-columns: repeat(2, minmax(0,1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -84,7 +84,7 @@
   }
 
   .cardLayout {
-    grid-template-columns: repeat(3, minmax(0,1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
@@ -106,9 +106,9 @@
 
 @media (min-width: 1280px) {
   .main {
-  margin-top: 7rem 112px
+    margin-top: 7rem 112px;
   }
   .cardLayout {
-  grid-template-columns: repeat(3, minmax(0,1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }

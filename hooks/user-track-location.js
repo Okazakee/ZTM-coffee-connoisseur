@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { ACTION_TYPES, StoreContext } from '../contexts/store-context'
+import { ACTION_TYPES, StoreContext } from "../contexts/store-context";
 
 export default function useTrackLocation() {
   const [locationErrorMsg, setLocationErrorMsg] = useState("");
@@ -15,8 +15,8 @@ export default function useTrackLocation() {
     /* setLatLong(`${latitude},${longitude}`); */
     dispatch({
       type: ACTION_TYPES.SET_LAT_LONG,
-      payload: {latLong: `${latitude},${longitude}`}
-    })
+      payload: { latLong: `${latitude},${longitude}` },
+    });
     setLocationErrorMsg("");
     setisFindingLocation(false);
   };
@@ -42,6 +42,6 @@ export default function useTrackLocation() {
     /* latLong, */
     handleTrackLocation,
     locationErrorMsg,
-    isFindingLocation
+    isFindingLocation,
   };
-};
+}

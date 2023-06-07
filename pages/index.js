@@ -1,4 +1,4 @@
-import {useEffect, useState, useContext} from "react";
+import { useEffect, useState, useContext } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
@@ -8,11 +8,11 @@ import Card from "../components/card";
 import { fetchCoffeeStores } from "../libs/coffee-stores";
 import useTrackLocation from "../hooks/user-track-location";
 
-import { ACTION_TYPES, StoreContext } from '../contexts/store-context'
+import { ACTION_TYPES, StoreContext } from "../contexts/store-context";
 
-export default function Home({coffeeStoresInit}) {
-
-  const { handleTrackLocation, locationErrorMsg, isFindingLocation } = useTrackLocation();
+export default function Home({ coffeeStoresInit }) {
+  const { handleTrackLocation, locationErrorMsg, isFindingLocation } =
+    useTrackLocation();
 
   /* const [coffeeStores, SetCoffeeStores] = useState(coffeeStoresInit); */
   const [coffeeStoresError, SetCoffeeStoresError] = useState(null);
@@ -25,7 +25,9 @@ export default function Home({coffeeStoresInit}) {
     async function setCoffeeStoresByLocation() {
       if (latLong) {
         try {
-          const response = await fetch(`/api/getCoffeeStoresByLocation?latLong=${latLong}`);
+          const response = await fetch(
+            `/api/getCoffeeStoresByLocation?latLong=${latLong}`
+          );
 
           const coffeeStores = await response.json();
 
@@ -35,7 +37,7 @@ export default function Home({coffeeStoresInit}) {
             type: ACTION_TYPES.SET_COFFEE_STORES,
             payload: {
               coffeeStores,
-            }
+            },
           });
 
           SetCoffeeStoresError("");
@@ -51,8 +53,8 @@ export default function Home({coffeeStoresInit}) {
 
   const handleOnBannerClick = () => {
     handleTrackLocation();
-    console.log({latLong, locationErrorMsg})
-  }
+    console.log({ latLong, locationErrorMsg });
+  };
 
   return (
     <div className={styles.container}>
@@ -64,41 +66,57 @@ export default function Home({coffeeStoresInit}) {
 
       <main className={styles.main}>
         <h1 className={styles.title}>Coffee Connoisseur</h1>
-        <Banner buttonText={isFindingLocation ? "Locating…" : "View stores nearby"} handleOnClick={handleOnBannerClick}/>
+        <Banner
+          buttonText={isFindingLocation ? "Locating…" : "View stores nearby"}
+          handleOnClick={handleOnBannerClick}
+        />
         {locationErrorMsg && <h2>Error: {locationErrorMsg}!</h2>}
         {coffeeStoresError && <h2>Error: {coffeeStoresError}!</h2>}
         <div className={styles.heroImage}>
-          <Image src="/static/hero-image.png" width={700} height={400} alt="heroImg"></Image>
+          <Image
+            src="/static/hero-image.png"
+            width={700}
+            height={400}
+            alt="heroImg"
+          ></Image>
         </div>
-        {coffeeStores &&
-        <div className={styles.sectionWrapper}>
-          <h2 className={styles.heading2}>{`Stores near ${coffeeStores[0]?.locality || "Palermo"}`}</h2>
-          <div className={styles.cardLayout}>
-            {(coffeeStores.length === 0 ? coffeeStoresInit : coffeeStores).map((store) => {
-              return(
-                <Card
-                  className={styles.card}
-                  key={store.id}
-                  name={store.name}
-                  href={`/coffee-store/${store.id}`}
-                  imgUrl={store.imgUrl || "https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80"}
-                />
-              )
-            })}
+        {coffeeStores && (
+          <div className={styles.sectionWrapper}>
+            <h2 className={styles.heading2}>{`Stores near ${
+              coffeeStores[0]?.locality || "Palermo"
+            }`}</h2>
+            <div className={styles.cardLayout}>
+              {(coffeeStores.length === 0
+                ? coffeeStoresInit
+                : coffeeStores
+              ).map((store) => {
+                return (
+                  <Card
+                    className={styles.card}
+                    key={store.id}
+                    name={store.name}
+                    href={`/coffee-store/${store.id}`}
+                    imgUrl={
+                      store.imgUrl ||
+                      "https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80"
+                    }
+                  />
+                );
+              })}
+            </div>
           </div>
-        </div>}
+        )}
       </main>
     </div>
   );
 }
 
 export async function getStaticProps(context) {
-
   const coffeeStoresInit = await fetchCoffeeStores();
 
   return {
     props: {
       coffeeStoresInit,
-    }
-  }
+    },
+  };
 }

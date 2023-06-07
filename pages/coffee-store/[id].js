@@ -1,32 +1,66 @@
-import { useContext, useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import Link from 'next/link';
-import Head from 'next/head';
-import Image from 'next/image';
-import cls from 'classnames';
-import { fetchCoffeeStores } from '../../libs/coffee-stores';
+import { useContext, useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import Link from "next/link";
+import Head from "next/head";
+import Image from "next/image";
+import cls from "classnames";
+import { fetchCoffeeStores } from "../../libs/coffee-stores";
 
-import styles from '../../styles/coffee-store.module.css';
+import styles from "../../styles/coffee-store.module.css";
 
-import { StoreContext } from '../../contexts/store-context';
-import { isEmpty } from '../../utils';
+import { StoreContext } from "../../contexts/store-context";
+import { isEmpty } from "../../utils";
 
-export default function CoffeeStore({ initialProps }) {
+export default function CoffeeStore(initialProps) {
   const router = useRouter();
   const id = router.query.id;
 
-  const { state: { coffeeStores } } = useContext(StoreContext);
+  const {
+    state: { coffeeStores },
+  } = useContext(StoreContext);
 
   const [coffeeStore, setCoffeeStore] = useState(initialProps.coffeeStore);
 
+  const handleCreateCoffeeStore = async (coffeeStore) => {
+    try {
+      const { id, name, voting, imgUrl, address, postcode } = coffeeStore;
+
+      const response = await fetch("/api/createCoffeeStore", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: `${id}`,
+          name,
+          address: address || "",
+          postcode: postcode || "",
+          imgUrl,
+          voting: 0,
+        }),
+      });
+
+      const dbCoffeeStore = response.json();
+      console.log("dbstores", dbCoffeeStore);
+    } catch (error) {
+      console.error("Error creating coffee-store", error);
+    }
+  };
+
   useEffect(() => {
-    if (isEmpty(coffeeStore)) {
+    if (isEmpty(initialProps.coffeeStore)) {
       if (coffeeStores.length > 0) {
-        const findCoffeeStoreById = coffeeStores.find((store) => store.id.toString() === id);
-        setCoffeeStore(findCoffeeStoreById);
+        const cofeeStoresFromContext = coffeeStores.find(
+          (store) => store.id.toString() === id
+        );
+
+        if (cofeeStoresFromContext) {
+          setCoffeeStore(cofeeStoresFromContext);
+          handleCreateCoffeeStore(cofeeStoresFromContext);
+        }
       }
     }
-  }, [id, coffeeStore, coffeeStores]);
+  }, [id, coffeeStore, coffeeStores, initialProps.coffeeStore]);
 
   if (router.isFallback) {
     return <div>Loading</div>;
@@ -35,7 +69,7 @@ export default function CoffeeStore({ initialProps }) {
   const { address, postcode, name, imgUrl } = coffeeStore;
 
   const handleUpvoteButton = () => {
-    console.log('handle upvote');
+    console.log("handle upvote");
   };
 
   return (
@@ -54,7 +88,10 @@ export default function CoffeeStore({ initialProps }) {
             <h1>{name}</h1>
           </div>
           <Image
-            src={imgUrl || 'https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80'}
+            src={
+              imgUrl ||
+              "https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80"
+            }
             width={600}
             height={360}
             className={styles.storeImg}
@@ -62,21 +99,36 @@ export default function CoffeeStore({ initialProps }) {
           />
         </div>
 
-        <div className={cls('glass', styles.col2)}>
+        <div className={cls("glass", styles.col2)}>
           {address && (
             <div className={styles.iconWrapper}>
-              <Image src={'/static/icons/places.svg'} width={24} height={24} alt={name} />
+              <Image
+                src={"/static/icons/places.svg"}
+                width={24}
+                height={24}
+                alt={name}
+              />
               <p className={styles.text}>{address}</p>
             </div>
           )}
           {postcode && (
             <div className={styles.iconWrapper}>
-              <Image src={'/static/icons/nearMe.svg'} width={24} height={24} alt={name} />
+              <Image
+                src={"/static/icons/nearMe.svg"}
+                width={24}
+                height={24}
+                alt={name}
+              />
               <p className={styles.text}>{postcode}</p>
             </div>
           )}
           <div className={styles.iconWrapper}>
-            <Image src={'/static/icons/star.svg'} width={24} height={24} alt={name} />
+            <Image
+              src={"/static/icons/star.svg"}
+              width={24}
+              height={24}
+              alt={name}
+            />
             <p className={styles.text}>1</p>
           </div>
           <button className={styles.upvoteButton} onClick={handleUpvoteButton}>
@@ -93,7 +145,9 @@ export async function getStaticProps(staticProps) {
 
   const coffeeStores = await fetchCoffeeStores();
 
-  const findCoffeeStoreById = coffeeStores.find((store) => store.id.toString() === params.id);
+  const findCoffeeStoreById = coffeeStores.find(
+    (store) => store.id.toString() === params.id
+  );
 
   return {
     props: {
