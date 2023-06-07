@@ -11,22 +11,41 @@ const createCoffeeStore = async (req, res) => {
         //find a record
         const findCoffeeStoreRecords = await table
           .select({
-            filterByFormula: `id="0"`,
+            filterByFormula: `id="10"`,
           })
           .firstPage();
-    
+
         if (findCoffeeStoreRecords.length !== 0) {
-    
+
             const records = findCoffeeStoreRecords.map((record) => {
                 return {
                     ...record.fields
                 }
             });
-    
-            res.json(records);
+
+            res.json({message: "Finded record", records});
         } else {
-          //create a record
-          res.json({ message: "create a record" });
+            //create a record
+
+            const createCoffeeStoreRecords = await table.create([
+                {
+                    "fields": {
+                    "id": "10",
+                    "imgUrl": "http://asd.com/img.png",
+                    "name": "admaidinn",
+                    "address": "via caput",
+                    "voting": 0
+                    }
+                }
+            ]);
+
+            const records = createCoffeeStoreRecords.map((record) => {
+                return {
+                    ...record.fields
+                }
+            });
+
+            res.json({message: "Created new record", records});
         }
       }
       catch (error) {
