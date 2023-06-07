@@ -1,8 +1,58 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<a name="readme-top"></a>
 
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+  <a href="https://github.com/Okazakee/ZTM-coffee-connoisseur">
+    <img src="assets/logo.png" alt="Logo" width="80" height="80">
+  </a>
+
+  <h3 align="center">Coffee Connoisseur</h3>
+
+  <p align="center">
+    Discover your local coffee stores!
+    <br />
+    <a href="https://ztm-coffee-connoisseur.vercel.app/">View Live Demo</a>
+  </p>
+</div>
+
+<!-- ABOUT THE PROJECT -->
+## About The Project
+
+![Project screenshot][project-screenshot]
+
+This is the first NextJS WebApp project committed from the [ZTM NextJS Course](https://www.udemy.com/course/complete-nextjs-developer-zero-to-mastery/).
+
+The WebApp lets you find coffee stores near your location (Palermo set as default), the user can navigate through various coffee stores gathering their information such as it's name or address and can leave a star to upvote the coffee store.
+
+### Built With
+
+These are the major frameworks/APIs used in this project.
+
+[![Next][Next.js]][Next-url]
+[![Foursquare][Foursquare]][Foursquare-url]
+[![Airtable][Airtable]][Airtable-url]
+[![Unsplash][Unsplash]][Unsplash-url]
+
+## How it works
+Coffee stores data is gathered through Foursquare API, images are taken from Unsplash API, it is statically served for Palermo as the index default stores location, and dynamically served when user searches stores near himself, at first the store data is serverside rendered, then it's data is cached inside an Airtable base to be used when the same store is visited.
+
+<!-- GETTING STARTED -->
 ## Getting Started
 
-First, run the development server:
+* Clone the repo:
+```bash
+git clone https://github.com/Okazakee/ZTM-coffee-connoisseur.git
+```
+
+* Install dependencies:
+```bash
+npm -i
+# or
+yarn
+```
+
+* Run the development server:
 
 ```bash
 npm run dev
@@ -10,25 +60,18 @@ npm run dev
 yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+[project-screenshot]: assets/screenshot.png
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+[Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
+[Next-url]: https://nextjs.org/
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+[Airtable]: https://img.shields.io/badge/Airtable-20232A?style=for-the-badge&logo=airtable&logoColor=61DAFB
+[Airtable-url]: https://airtable.com/
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+[Unsplash]: https://img.shields.io/badge/Unsplash-eeeeee?style=for-the-badge&logo=unsplash&logoColor=000000
+[Unsplash-url]: https://Unsplash.com/
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+[Foursquare]: https://img.shields.io/badge/Foursquare-d9f1ee?style=for-the-badge&logo=foursquare&logoColor=000000
+[Foursquare-url]: https://foursquare.com/
