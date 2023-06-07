@@ -20,6 +20,7 @@ export default function CoffeeStore(initialProps) {
   } = useContext(StoreContext);
 
   const [coffeeStore, setCoffeeStore] = useState(initialProps.coffeeStore);
+  const [isRequestSent, setIsRequestSent] = useState(false);
 
   const handleCreateCoffeeStore = async (coffeeStore) => {
     try {
@@ -36,7 +37,7 @@ export default function CoffeeStore(initialProps) {
           address: address || "",
           postcode: postcode || "",
           imgUrl,
-          voting: 0,
+          voting,
         }),
       });
 
@@ -48,19 +49,34 @@ export default function CoffeeStore(initialProps) {
   };
 
   useEffect(() => {
-    if (isEmpty(initialProps.coffeeStore)) {
-      if (coffeeStores.length > 0) {
-        const cofeeStoresFromContext = coffeeStores.find(
-          (store) => store.id.toString() === id
-        );
+    if (!isRequestSent) {
+      if (isEmpty(initialProps.coffeeStore)) {
+        if (coffeeStores.length > 0) {
+          const cofeeStoresFromContext = coffeeStores.find(
+            (store) => store.id.toString() === id
+          );
 
-        if (cofeeStoresFromContext) {
-          setCoffeeStore(cofeeStoresFromContext);
-          handleCreateCoffeeStore(cofeeStoresFromContext);
+          if (cofeeStoresFromContext) {
+            setCoffeeStore(cofeeStoresFromContext);
+            handleCreateCoffeeStore(cofeeStoresFromContext);
+            setIsRequestSent(true);
+          }
         }
+      } else {
+        // SSG
+        handleCreateCoffeeStore(initialProps.coffeeStore);
+        setIsRequestSent(true);
       }
     }
-  }, [id, coffeeStore, coffeeStores, initialProps.coffeeStore]);
+  }, [
+    id,
+    coffeeStore,
+    coffeeStores,
+    initialProps,
+    initialProps.coffeeStore,
+    isRequestSent,
+    setIsRequestSent,
+  ]);
 
   if (router.isFallback) {
     return <div>Loading</div>;
