@@ -9,9 +9,12 @@ const createCoffeeStore = async (req, res) => {
 
     try {
         //find a record
+
+        const {id, name, address, imgUrl, voting} = req.body;
+
         const findCoffeeStoreRecords = await table
           .select({
-            filterByFormula: `id="10"`,
+            filterByFormula: `id=${id}`,
           })
           .firstPage();
 
@@ -29,12 +32,12 @@ const createCoffeeStore = async (req, res) => {
 
             const createCoffeeStoreRecords = await table.create([
                 {
-                    "fields": {
-                    "id": "10",
-                    "imgUrl": "http://asd.com/img.png",
-                    "name": "admaidinn",
-                    "address": "via caput",
-                    "voting": 0
+                    fields: {
+                    id,
+                    imgUrl,
+                    name,
+                    address,
+                    voting
                     }
                 }
             ]);
